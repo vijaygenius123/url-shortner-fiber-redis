@@ -1,8 +1,10 @@
 package routes
 
+import "C"
 import (
 	"github.com/gofiber/fiber/v2"
 	"time"
+	"url-shortner-fiber-redis/helpers"
 )
 
 type request struct {
@@ -26,5 +28,11 @@ func ShortenUrl(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "cannot parse JSON"})
 	}
 	// implement rate limiting
+
+	if !helpers.RemoveDomainError(body.URL) {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid URL"})
+	}
+
+	body.URL = helpers.EnforceHTTP(body.URL)
 
 }
