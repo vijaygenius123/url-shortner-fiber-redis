@@ -35,4 +35,5 @@ func ShortenUrl(c *fiber.Ctx) error {
 
 	body.URL = helpers.EnforceHTTP(body.URL)
 
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "success"})
 }
